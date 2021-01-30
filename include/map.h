@@ -83,7 +83,6 @@ Point* map_getOutput(const Map* pm);
  */
 Point* map_getNeightbarPoint(const Map* pm, const Point* pp, const Move mov);
 
-/* Indica el tamaño de un mapa, devuelve NULL si se produce algún error */
 /**
  * @brief Establece el tamanio de un mapa.
  * @param pm Mapa cuyo tamanio se establece.
