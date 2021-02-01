@@ -54,3 +54,4 @@ dkms.conf
 # Specific project files
 .cache/
 compile_commands.json
+ref/

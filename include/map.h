@@ -1,4 +1,4 @@
-/** 
+/**
  * @file map.h
  * @brief Interfaz publica del TAD Map.
  * @author Javier Mateos Ines Martin
@@ -16,19 +16,22 @@
 
 #define MAX_POINT 4096 /**< Numero maximo de puntos de un mapa */
 
+/**
+ * Estructura que define un mapa de un laberinto.
+ */
 typedef struct _Map Map;
 
 /**
  * @enum Move
  * @brief Movimientos posibles en un mapa.
  */
-typedef enum{
-  RIGHT,
-  UP,
-  LEFT,
-  DOWN,
-  STAY /**< No movimiento **/
-}Move;
+typedef enum {
+    RIGHT,
+    UP,
+    LEFT,
+    DOWN,
+    STAY /**< No movimiento **/
+} Move;
 
 /**
  * @brief Inicializa un mapa.
@@ -96,7 +99,7 @@ Status map_setSize(Map* pm, int nrow, int ncol);
  * @brief Aniade un punto a un mapa.
  *
  * Si el punto ya se encuentra en el mapa éste es modificado.
- * 
+ *
  * @param pm Mapa al que se aniade el punto.
  * @param pp Punto aniadido al mapa.
  * @return OK si todo sale bien o ERR si se produce algun error.

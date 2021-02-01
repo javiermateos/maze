@@ -18,12 +18,15 @@
  * un mapa.
  */
 #define ERRCHAR 'E' /**< TODO **/
-#define INPUT 'i' /**< TODO **/
+#define INPUT 'i'   /**< TODO **/
 #define VISITED 'v' /**< TODO **/
-#define OUTPUT 'o' /**< TODO **/
+#define OUTPUT 'o'  /**< TODO **/
 #define BARRIER '+' /**< TODO **/
-#define SPACE ' ' /**< TODO **/
+#define SPACE ' '   /**< TODO **/
 
+/**
+ * Estructura que representa un punto en el mapa.
+ */
 typedef struct _Point Point;
 
 /**
@@ -33,45 +36,43 @@ typedef struct _Point Point;
  * @param s Simbolo asociado al punto.
  * @return El punto inicializado o NULL si se ha producido un error.
  */
-Point *point_ini(int x, int y, char s);
-
+Point* point_ini(int x, int y, char s);
 /**
  * @brief Libera un punto.
  * @param pp Punto liberado.
  */
-void point_free(Point *pp);
+void point_free(Point* pp);
 
 /**
  * @brief Obtiene la coordenada del eje de abcisas (Eje X).
  * @param pp Punto del que se obtiene la coordenada.
  * @return Coordenada x o -1 si se produce algun error.
  */
-int point_getCoordinateX(const Point *pp);
+int point_getCoordinateX(const Point* pp);
 
 /**
  * @brief Obtiene la coordenada del eje de coordenadas (Eje Y).
  * @param pp Punto del que se obtiene la coordenada.
  * @return Coordenada y o -1 si se produce algun error.
  */
-int point_getCoordinateY(const Point *pp);
+int point_getCoordinateY(const Point* pp);
 
 /**
  * @brief Obtiene el simbolo de un punto.
  * @param pp Punto del que se obtiene el simbolo.
  * @return Simbolo del punto o ERRCHAR si se produce algun error.
  */
-char point_getSymbol(const Point *pp);
+char point_getSymbol(const Point* pp);
 
-/* Funciones derivadas que indican el tipo de punto que tenemos */
 /**
  * @defgroup Tipo de punto
- * 
+ *
  * Funciones que indican el tipo de punto que tenemos.
  */
-Bool point_isInput(Point *pp);
-Bool point_isOutput(Point *pp);
-Bool point_isBarrier(Point *pp);
-Bool point_isSpace(Point *pp);
+Bool point_isInput(Point* pp);
+Bool point_isOutput(Point* pp);
+Bool point_isBarrier(Point* pp);
+Bool point_isSpace(Point* pp);
 
 /**
  * @brief Modifica la coordenada X de un punto.
@@ -79,7 +80,7 @@ Bool point_isSpace(Point *pp);
  * @param x Nueva coordenada del eje X.
  * @return OK o ERR si se produce algun error.
  */
-Status point_setCoordinateX(Point *pp, const int x);
+Status point_setCoordinateX(Point* pp, const int x);
 
 /**
  * @brief Modifica la coordenada Y de un punto.
@@ -87,7 +88,7 @@ Status point_setCoordinateX(Point *pp, const int x);
  * @param y Nueva coordenada del eje Y.
  * @return OK o ERR si se produce algun error.
  */
-Status point_setCoordinateY(Point *pp, const int y);
+Status point_setCoordinateY(Point* pp, const int y);
 
 /**
  * @brief Modifica el simbolo de un punto.
@@ -95,7 +96,7 @@ Status point_setCoordinateY(Point *pp, const int y);
  * @param s Nuevo simbolo del punto.
  * @return OK o ERR si se produce en algun error.
  */
-Status point_setSymbol(Point *pp, const char s);
+Status point_setSymbol(Point* pp, const char s);
 
 /**
  * @brief Permite saber si dos puntos son iguales.
@@ -106,21 +107,18 @@ Status point_setSymbol(Point *pp, const char s);
  * @param pp2 Otro de los puntos comparados.
  * @return TRUE si son iguales o FALSE si no lo son.
  */
-Bool point_equals(const Point *pp1, const Point *pp2);
+Bool point_equals(const Point* pp1, const Point* pp2);
 
-/* Copia los datos de un punto a otro devolviendo el punto copiado (incluyendo
- * la reserva de la memoria necesaria)
- * si todo ha ido bien, o NULL en otro caso */
 /**
  * @brief Copia un punto.
- * 
+ *
  * El punto resultante contiene los mismos valores del punto copiado en
  * los atributos del punto.
  *
  * @param pp Punto que se copia.
  * @return Un nuevo punto o NULL si se produce algun error.
  */
-Point *point_copy(const Point *pp);
+Point* point_copy(const Point* pp);
 
 /**
  * @brief Permite imprimir el estado de un punto.
@@ -128,8 +126,9 @@ Point *point_copy(const Point *pp);
  * Formato: [(X,Y): symbol].
  *
  * @param pf Fichero en el que se imprime el punto.
- * @return Numero de caracteres impresos con exito en el fichero.
+ * @return Numero de caracteres impresos con exito en el fichero
+ * o un numero negativo si ocurre algun error.
  */
-int point_print(FILE *pf, const Point *pp);
+int point_print(FILE* pf, const Point* pp);
 
 #endif /* POINT_H */

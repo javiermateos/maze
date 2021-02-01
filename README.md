@@ -1,4 +1,8 @@
 # Maze
 
 ## TODO
-- [ ] Terminar Makefile. Estructura recomendada: libmaze.mk , test.mk, makefile (principal).
+- [X] Terminar Makefile.
+- [X] Terminar de escribir las cabeceras de los .h.
+- [X] Implementar point.h.
+- [ ] Hacer el test de point.
+- [ ] Implementar map.h.
