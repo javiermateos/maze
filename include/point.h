@@ -113,7 +113,7 @@ Bool point_equals(const Point* pp1, const Point* pp2);
  * @brief Copia un punto.
  *
  * El punto resultante contiene los mismos valores del punto copiado en
- * los atributos del punto.
+ * los atributos del punto. Esta funcion reserva memoria.
  *
  * @param pp Punto que se copia.
  * @return Un nuevo punto o NULL si se produce algun error.
