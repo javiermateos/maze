@@ -10,7 +10,6 @@
 #include <string.h>
 
 #include "point.h"
-#include "types.h"
 
 struct _Point {
     int x;  /**< La coordenada x en el mapa */

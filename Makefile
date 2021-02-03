@@ -4,15 +4,17 @@
 # @file Makefile
 # @version 1.0
 ##
+PDIR := $(shell pwd)
 SDIR := src
 IDIR := include
 TDIR := test
 ODIR := obj
 BDIR := build
 LDIR := lib
+DDIR := data
 
 NAME := libmaze
-L_NAMES:= point.c map.c
+L_NAMES:= point.c map.c utils.c
 T_NAMES:= map_test.c point_test.c
 
 CC := gcc
@@ -67,15 +69,19 @@ clean:
 test: build_tests
 	@echo ">Running point_test..."
 	$(BDIR)/point_test
-	@echo ">Running map_test..."
-	$(BDIR)/map_test m1.txt
+	@echo ">Running map_test with m1.txt..."
+	$(BDIR)/map_test $(DDIR)/m1.txt
+	@echo ">Running map_test with m2.txt..."
+	$(BDIR)/map_test $(DDIR)/m2.txt
+	@echo ">Running map_test with m3.txt..."
+	$(BDIR)/map_test $(DDIR)/m3.txt
 
 .PHONY: testv
 testv: build_tests
 	@echo ">Running point_test with valgrind..."
 	valgrind --leak-check=full $(BDIR)/point_test
 	@echo ">Running map_test with valgrind..."
-	valgrind --leak-check=full $(BDIR)/map_test m1.txt
+	valgrind --leak-check=full $(BDIR)/map_test $(DDIR)/m1.txt
 
 # Deteccion de dependencias automatica
 CFLAGS += -MMD

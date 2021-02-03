@@ -14,15 +14,15 @@
 #include "types.h"
 
 /*
- * Constantes públicas que definen los tipos de puntos que se permiten en
- * un mapa.
+ * Constantes públicas que definen la representacion de puntos que se permiten
+ * en un mapa.
  */
-#define ERRCHAR 'E' /**< TODO **/
-#define INPUT 'i'   /**< TODO **/
-#define VISITED 'v' /**< TODO **/
-#define OUTPUT 'o'  /**< TODO **/
-#define BARRIER '+' /**< TODO **/
-#define SPACE ' '   /**< TODO **/
+#define ERRCHAR 'E' /**< Error en el punto */
+#define INPUT 'i'   /**< Punto de entrada del laberinto */
+#define VISITED 'v' /**< Punto que ha sido visitado */
+#define OUTPUT 'o'  /**< Punto de salida del laberinto */
+#define BARRIER '+' /**< Punto no transitable */
+#define SPACE ' '   /**< Punto transitable */
 
 /**
  * Estructura que representa un punto en el mapa.

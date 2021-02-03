@@ -1,22 +1,23 @@
+/**
+ * @file map.c
+ * @brief Implementacion del TAD Map.
+ * @author Javier Mateos
+ *
+ * @date 23/01/2020
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "map.h"
 #include "point.h"
-#include "types.h"
-
-#define NCOORD 2 /**< Numero de coordenadas de los puntos del mapa */
 
 struct _Map {
     int nrow;
     int ncol;
-    int npuntos;
-    Point* input; /** TODO: Pensar que hacer con input y output **/
-    Point* output;
     Point* points[MAX_POINT];
 };
 
-Map* map_init()
+Map* map_ini()
 {
     int i;
     Map* pm = NULL;
@@ -29,10 +30,6 @@ Map* map_init()
     for (i = 0; i < MAX_POINT; i++) {
         pm->points[i] = NULL;
     }
-
-    pm->npuntos = 0;
-    pm->input = NULL;
-    pm->output = NULL;
 
     return pm;
 }
@@ -74,20 +71,38 @@ int map_getNcols(const Map* pm)
 
 Point* map_getInput(const Map* pm)
 {
+    int i;
+    Point* input = NULL;
+
     if (!pm) {
         return NULL;
     }
 
-    return pm->input;
+    for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
+        if (point_getSymbol(pm->points[i]) == INPUT) {
+            input = pm->points[i];
+        }
+    }
+
+    return input;
 }
 
 Point* map_getOutput(const Map* pm)
 {
+    int i;
+    Point* output = NULL;
+
     if (!pm) {
         return NULL;
     }
 
-    return pm->output;
+    for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
+        if (point_getSymbol(pm->points[i]) == OUTPUT) {
+            output = pm->points[i];
+        }
+    }
+
+    return output;
 }
 
 Point* map_getNeightbarPoint(const Map* pm, const Point* pp, const Move mov)
@@ -148,9 +163,6 @@ Status map_setSize(Map* pm, int nrow, int ncol)
     return OK;
 }
 
-/** TODO: Falta considerar la inserccion del punto de inicio y final del
- * laberinto. Además, hay que controlar que ocurre si se modifica el
- * punto de inicio y final del laberinto. **/
 Status map_setPoint(Map* pm, const Point* pp)
 {
     char s;
@@ -166,7 +178,7 @@ Status map_setPoint(Map* pm, const Point* pp)
     y = point_getCoordinateY(pp);
 
     indice = y * ncols + x;
-    if (indice > MAX_POINT) {
+    if (indice >= MAX_POINT) {
         return ERR;
     }
 
@@ -188,7 +200,9 @@ Status map_setPoint(Map* pm, const Point* pp)
 int map_print(FILE* pf, const Map* pm)
 {
     int i, j;
+    int index;
     int counter = 0;
+    char c;
 
     if (!pf || !pm) {
         return -1;
@@ -196,8 +210,9 @@ int map_print(FILE* pf, const Map* pm)
 
     for (i = 0; i < pm->nrow; i++) {
         for (j = 0; j < pm->ncol; j++) {
-            counter +=
-              fprintf(pf, "%c", point_getSymbol(pm->points[i * pm->ncol + j]));
+            index  = (pm->ncol) * i + j;
+            c = point_getSymbol(pm->points[index]);
+            counter += fprintf(pf, "%c", c);
         }
         fprintf(pf, "\n");
     }

@@ -1,7 +1,7 @@
 /**
  * @file map.h
  * @brief Interfaz publica del TAD Map.
- * @author Javier Mateos Ines Martin
+ * @author Javier Mateos
  *
  * @date 23/01/2020
  */

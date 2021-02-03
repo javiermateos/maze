@@ -6,4 +6,5 @@
 - [X] Implementar point.h.
 - [X] Hacer el test de point.
 - [X] Implementar map.h.
-- [ ] Hacer el test de map.
+- [X] Hacer el test de map.
+- [ ] 
