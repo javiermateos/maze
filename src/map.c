@@ -17,8 +17,7 @@ struct _Map {
     Point* points[MAX_POINT];
 };
 
-Map* map_ini()
-{
+Map* map_ini() {
     int i;
     Map* pm = NULL;
 
@@ -214,7 +213,7 @@ int map_print(FILE* pf, const Map* pm)
             c = point_getSymbol(pm->points[index]);
             counter += fprintf(pf, "%c", c);
         }
-        fprintf(pf, "\n");
+        counter += fprintf(pf, "\n");
     }
     return counter;
 }
