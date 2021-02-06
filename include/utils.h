@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 #include "map.h"
+#include "stack.h"
 #include "types.h"
 
 #define MAX 100 /**< Numero maximo de columnas del laberinto */
@@ -23,5 +24,14 @@
  * @return OK si todo sale bien o ERR si se produce algun error.
  */
 Status map_read(FILE* pf, Map* pl);
+
+/**
+ * @brief Obtiene un camino del mapa desde su input hasta su output.
+ * @param pm Mapa del que se obtiene el camino.
+ * @param[out] ps Pila empleada para almacenar el camino.
+ * @return TRUE si encuentra un camino o FALSE si no lo encuentra o se
+ * produce algun error.
+ */
+Bool deep_search(Map* pm, Stack* ps_c);
 
 #endif

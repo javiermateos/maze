@@ -8,14 +8,19 @@
 
 #include <stdlib.h>
 
-#include "stack_element.h"
+#include "stack.h"
 
 struct _Stack {
-    int top; /**< Indice del top de la pila */
-    Element* item[MAXSTACK]; /**< Representacion de la pila */
+    int top;              /**< Indice del top de la pila */
+    void* item[MAXSTACK]; /**< Representacion de la pila */
+    free_element_function_type free_element_function;
+    copy_element_function_type copy_element_function;
+    print_element_function_type print_element_function;
 };
 
-Stack* stack_ini()
+Stack* stack_ini(free_element_function_type f1,
+                 copy_element_function_type f2,
+                 print_element_function_type f3)
 {
     int i;
     Stack* ps = NULL;
@@ -28,8 +33,11 @@ Stack* stack_ini()
     for (i = 0; i < MAXSTACK; i++) {
         ps->item[i] = NULL;
     }
-    
+
     ps->top = -1;
+    ps->free_element_function = f1;
+    ps->copy_element_function = f2;
+    ps->print_element_function = f3;
 
     return ps;
 }
@@ -41,9 +49,9 @@ void stack_free(Stack* ps)
     if (!ps) {
         return;
     }
-    
+
     for (i = 0; i <= ps->top; i++) {
-        element_free(ps->item[i]);
+        ps->free_element_function(ps->item[i]);
         ps->item[i] = NULL;
     }
     free(ps);
@@ -67,7 +75,7 @@ Bool stack_isFull(const Stack* ps)
     if (!ps) {
         return FALSE;
     }
-    
+
     if (ps->top == MAXSTACK - 1) {
         return TRUE;
     }
@@ -75,19 +83,19 @@ Bool stack_isFull(const Stack* ps)
     return FALSE;
 }
 
-Status stack_push(Stack* ps, const Element* e)
+Status stack_push(Stack* ps, const void* e)
 {
     if (!ps || !e) {
         return ERR;
     }
-    
+
     if (stack_isFull(ps)) {
         return ERR;
     }
 
     ps->top++;
 
-    ps->item[ps->top] = element_copy(e);
+    ps->item[ps->top] = ps->copy_element_function(e);
     if (!ps->item[ps->top]) {
         return ERR;
     }
@@ -95,9 +103,9 @@ Status stack_push(Stack* ps, const Element* e)
     return OK;
 }
 
-Element* stack_pop(Stack* ps)
+void* stack_pop(Stack* ps)
 {
-    Element* e = NULL;
+    void* e = NULL;
 
     if (!ps) {
         return NULL;
@@ -115,9 +123,9 @@ Element* stack_pop(Stack* ps)
     return e;
 }
 
-Element* stack_top(Stack* ps)
+void* stack_top(Stack* ps)
 {
-    Element* e = NULL;
+    void* e = NULL;
 
     if (!ps) {
         return NULL;
@@ -127,7 +135,7 @@ Element* stack_top(Stack* ps)
         return NULL;
     }
 
-    e = element_copy(ps->item[ps->top]);
+    e = ps->copy_element_function(ps->item[ps->top]);
     if (!e) {
         return NULL;
     }
@@ -135,11 +143,10 @@ Element* stack_top(Stack* ps)
     return e;
 }
 
-int stack_print(FILE* pf, const Stack* ps) 
+int stack_print(FILE* pf, const Stack* ps)
 {
     int i;
     int counter = 0;
-    int* value;
 
     if (!ps || !ps) {
         return -1;
@@ -158,9 +165,8 @@ int stack_print(FILE* pf, const Stack* ps)
         counter += fprintf(pf, "no vacia):\n");
     }
 
-    for (i = 0; i < MAXSTACK && ps->item[i] != NULL; i++) {
-        value = (int*)element_getInfo(ps->item[i]);
-        counter += fprintf(pf, "[%d]\n", *value);
+    for (i = ps->top; i >= 0; i--) {
+        counter += ps->print_element_function(pf, ps->item[i]);
     }
 
     return counter;

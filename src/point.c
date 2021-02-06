@@ -174,5 +174,5 @@ int point_print(FILE* pf, const Point* pp)
         return -1;
     }
 
-    return fprintf(pf, "[(%d,%d): %c]", pp->x, pp->y, pp->s);
+    return fprintf(pf, "[(%d,%d): %c]\n", pp->x, pp->y, pp->s);
 }

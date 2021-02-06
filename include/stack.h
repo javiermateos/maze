@@ -3,16 +3,26 @@
  * @brief Interfaz publica del TAD Stack.
  * @author Javier Mateos
  *
- * @date 05/02/2020
+ * @date 05/02/2021
  */
 
 #ifndef STACK_ELEMENT_H
-#define	STACK_ELEMENT_H
+#define STACK_ELEMENT_H
 
-#include "element.h"
 #include "types.h"
 
-#define MAXSTACK 100 /**< Maximo numero de elementos almacenados en la pila */
+/** 
+ * Maximo numero de elementos que se puede almacenar en la pila
+ */
+#define MAXSTACK 4096 
+
+/**
+ * Tipos de punteros soportados por la pila. Los datos almacenados en la pila
+ * deben implementar estas funciones.
+ */
+typedef void (*free_element_function_type)(void*);
+typedef void (*(*copy_element_function_type)(const void*));
+typedef int (*print_element_function_type)(FILE*, const void*);
 
 /**
  * Estructura que representa una pila FIFO.
@@ -21,9 +31,14 @@ typedef struct _Stack Stack;
 
 /**
  * @brief Inicializa la pila reservando memoria.
+ * @param f1 Funcion para liberar los elementos de la pila.
+ * @param f2 Funcion para copiar los elementos de la pila.
+ * @param f3 Funcion para imprimir los elementos de la pila.
  * @return La pila inicializada o NULL si se produce un error.
  */
-Stack* stack_ini();
+Stack* stack_ini(free_element_function_type f1,
+                 copy_element_function_type f2,
+                 print_element_function_type f3);
 
 /**
  * @brief Libera la memoria reservada de la pila.
@@ -54,7 +69,7 @@ Bool stack_isFull(const Stack* ps);
  * param e Elemento insertado en la pila.
  * @return OK si se inserta o ERR si se produce algun error.
  */
-Status stack_push(Stack* ps, const Element* e);
+Status stack_push(Stack* ps, const void* e);
 
 /**
  * @brief Extra un elemento en la pila.
@@ -65,18 +80,18 @@ Status stack_push(Stack* ps, const Element* e);
  * @param ps Pila de la que se extrae.
  * @return El elemento extraido o NULL si se produce un error.
  */
-Element* stack_pop(Stack* ps);
+void* stack_pop(Stack* ps);
 
 /**
  * @brief Obtiene el elemento del top de la pila.
  *
  * No modifica la pila. El elemento devuelto es una copia con memoria
  * reservada.
- * 
+ *
  * @param ps Pila de la que se copia el top.
  * @return Elemento del top de la pila o NULL si se produce algun error.
  */
-Element* stack_top(Stack* ps);
+void* stack_top(Stack* ps);
 
 /**
  * @brief Imprime toda la pila a un fichero.
@@ -86,8 +101,9 @@ Element* stack_top(Stack* ps);
  *
  * @param pf Archivo en el que se imprime.
  * @param ps Pila impresa.
- * @return Numero de caracteres escritos o menor que 0 si se produce un error.
+ * @return Numero de elementos de la pila escritos o menor que 0 si se produce 
+ * un error.
  */
 int stack_print(FILE* pf, const Stack* ps);
 
-#endif	/* STACK_ELEMENT_H */
+#endif /* STACK_ELEMENT_H */

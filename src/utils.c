@@ -8,6 +8,7 @@
 
 #include "utils.h"
 #include "point.h"
+#include "functions.h"
 
 Status map_read(FILE* pf, Map* pm)
 {
@@ -62,4 +63,65 @@ Status map_read(FILE* pf, Map* pm)
     point_free(temp);
 
     return OK;
+}
+
+Bool deep_search(Map* pm, Stack* ps_c)
+{
+    char s;
+    Move move;
+    Point* pp = NULL;
+    Point* pp_neightbar = NULL;
+    Stack* ps = NULL;
+
+    if (!pm || !ps_c) {
+        return FALSE;
+    }
+
+    ps = stack_ini(destroy_point_function, copy_point_function, print_point_function);
+    if (!ps) {
+        return FALSE;
+    }
+
+    pp = map_getInput(pm);
+    if (!pp) {
+        stack_free(ps);
+        return FALSE;
+    }
+
+    if (stack_push(ps, pp) == ERR || stack_push(ps_c, pp) == ERR) {
+        return FALSE;
+    }
+
+    point_free(pp);
+
+    while (!stack_isEmpty(ps)) {
+        pp = (Point*)stack_pop(ps);
+        s = point_getSymbol(pp);
+        if (s != VISITED) {
+            if (s != INPUT) {
+                point_setSymbol(pp, VISITED);
+                if (map_setPoint(pm, pp) == ERR) {
+                    point_free(pp);
+                    stack_free(ps);
+                    return FALSE;
+                }
+            }
+            for (move = RIGHT; move < STAY; move++) {
+                pp_neightbar = map_getNeightbarPoint(pm, pp, move);
+                if (point_isOutput(pp_neightbar)) {
+                    stack_push(ps_c, pp_neightbar);
+                    point_free(pp);
+                    stack_free(ps);
+                    return TRUE;
+                }
+                if (point_isSpace(pp_neightbar)) {
+                    stack_push(ps, pp_neightbar);
+                    stack_push(ps_c, pp_neightbar);
+                }
+            }
+        }
+        point_free(pp);
+    } 
+
+    return FALSE;
 }

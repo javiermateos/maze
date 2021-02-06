@@ -14,8 +14,8 @@ LDIR := lib
 DDIR := data
 
 NAME := libmaze
-L_NAMES:= point.c map.c utils.c stack_element.c element-int.c
-T_NAMES:= map_test.c point_test.c stack_test.c
+L_NAMES:= point.c map.c utils.c stack.c functions.c
+T_NAMES:= map_test.c point_test.c stack_test.c map_resolve_stack.c
 
 CC := gcc
 CFLAGS := -g -I$(IDIR) -ansi -pedantic -Wall -Wextra
@@ -75,8 +75,8 @@ test: build_tests
 	$(BDIR)/map_test $(DDIR)/m2.txt
 	@echo ">Running map_test with m3.txt..."
 	$(BDIR)/map_test $(DDIR)/m3.txt
-	@echo ">Running stack_test with 3 elements..."
-	$(BDIR)/stack_test 3
+	@echo ">Running stack_test with m1.txt..."
+	$(BDIR)/stack_test $(DDIR)/m1.txt
 
 .PHONY: testv
 testv: build_tests
@@ -84,8 +84,8 @@ testv: build_tests
 	valgrind --leak-check=full $(BDIR)/point_test
 	@echo ">Running map_test with valgrind..."
 	valgrind --leak-check=full $(BDIR)/map_test $(DDIR)/m1.txt
-	@echo ">Running stack_test with 3 elements and valgrind..."
-	valgrind --leak-check=full $(BDIR)/stack_test 3
+	@echo ">Running stack_test with m1.txt and valgrind..."
+	valgrind --leak-check=full $(BDIR)/stack_test $(DDIR)/m1.txt
 
 # Deteccion de dependencias automatica
 CFLAGS += -MMD

@@ -79,7 +79,7 @@ Point* map_getInput(const Map* pm)
 
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getSymbol(pm->points[i]) == INPUT) {
-            input = pm->points[i];
+            input = point_copy(pm->points[i]);
         }
     }
 
@@ -97,7 +97,7 @@ Point* map_getOutput(const Map* pm)
 
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getSymbol(pm->points[i]) == OUTPUT) {
-            output = pm->points[i];
+            output = point_copy(pm->points[i]);
         }
     }
 
@@ -143,7 +143,7 @@ Point* map_getNeightbarPoint(const Map* pm, const Point* pp, const Move mov)
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getCoordinateX(pm->points[i]) == x &&
             point_getCoordinateY(pm->points[i]) == y) {
-            pp_neightbar = pm->points[i];
+            pp_neightbar = point_copy(pm->points[i]);
         }
     }
 
@@ -182,7 +182,7 @@ Status map_setPoint(Map* pm, const Point* pp)
     }
 
     /** Comprobamos si existe el punto **/
-    if (pm->points[indice] != NULL) {
+    if (pm->points[indice]) {
         s = point_getSymbol(pp);
         point_setSymbol(pm->points[indice], s);
     } else {
