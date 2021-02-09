@@ -14,7 +14,7 @@ LDIR := lib
 DDIR := data
 
 NAME := libmaze
-L_NAMES:= point.c map.c utils.c stack.c functions.c
+L_NAMES:= point.c map.c utils.c stack.c functions.c queue.c
 T_NAMES:= map_test.c point_test.c stack_test.c map_resolve_stack.c
 
 CC := gcc
