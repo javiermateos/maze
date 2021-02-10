@@ -16,9 +16,9 @@
 typedef struct _List List;
 
 /** Tipos de punteros soportados por la cola */
-typedef void (*destroy_elementqueue_function_type)(void*);
-typedef void(*(*copy_elementqueue_function_type)(const void*));
-typedef int (*print_elementqueue_function_type)(FILE*, const void*);
+typedef void (*destroy_elementlist_function_type)(void*);
+typedef void(*(*copy_elementlist_function_type)(const void*));
+typedef int (*print_elementlist_function_type)(FILE*, const void*);
 typedef int (*cmp_elementlist_function_type)(const void*, const void*);
 
 /**
@@ -29,9 +29,9 @@ typedef int (*cmp_elementlist_function_type)(const void*, const void*);
  * @param f4 Funcion que compara dos elementos de una lista.
  * return La lista inicializada o NULL si se produce algun error.
  */
-List* list_ini(destroy_elementqueue_function_type f1,
-               copy_elementqueue_function_type f2,
-               print_elementqueue_function_type f3,
+List* list_ini(destroy_elementlist_function_type f1,
+               copy_elementlist_function_type f2,
+               print_elementlist_function_type f3,
                cmp_elementlist_function_type f4);
 
 /**
