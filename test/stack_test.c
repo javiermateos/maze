@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "functions.h"
+#include "stack.h"
 #include "map.h"
 #include "point.h"
-#include "stack.h"
 #include "utils.h"
 
 #define MAX 100

@@ -14,14 +14,14 @@ struct _Queue {
     void** head; /**< Punto de pop de la cola */
     void** end;  /**< Punto de push de la cola */
     void* item[MAXQUEUE];
-    destroy_elementqueue_function_type destroy_element_function;
-    copy_elementqueue_function_type copy_element_function;
-    print_elementqueue_function_type print_element_function;
+    free_element_function_type free_element_function;
+    copy_element_function_type copy_element_function;
+    print_element_function_type print_element_function;
 };
 
-Queue* queue_ini(destroy_elementqueue_function_type f1,
-                 copy_elementqueue_function_type f2,
-                 print_elementqueue_function_type f3)
+Queue* queue_ini(free_element_function_type f1,
+                 copy_element_function_type f2,
+                 print_element_function_type f3)
 {
     Queue* pq = NULL;
 
@@ -33,7 +33,7 @@ Queue* queue_ini(destroy_elementqueue_function_type f1,
     pq->head = pq->item;
     pq->end = pq->item;
 
-    pq->destroy_element_function = f1;
+    pq->free_element_function = f1;
     pq->copy_element_function = f2;
     pq->print_element_function = f3;
 
@@ -47,7 +47,7 @@ void queue_free(Queue* pq)
     }
 
     while (pq->head != pq->end) {
-        pq->destroy_element_function(*(pq->head));
+        pq->free_element_function(*(pq->head));
         if (pq->head != pq->item + MAXQUEUE + 1) {
             pq->head = pq->head + 1;
         } else {
@@ -146,8 +146,7 @@ int queue_size(const Queue* pq)
         return -1;
     }
 
-    /*TODO: Revisar si se puede hacer asi.*/
-    return pq->end - pq->head + 1;
+    return pq->end - pq->head;
 }
 
 int queue_print(FILE* pf, const Queue* pq)

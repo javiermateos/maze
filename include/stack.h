@@ -9,20 +9,13 @@
 #ifndef STACK_ELEMENT_H
 #define STACK_ELEMENT_H
 
+#include "functions.h"
 #include "types.h"
 
 /** 
  * Maximo numero de elementos que se puede almacenar en la pila
  */
 #define MAXSTACK 4096 
-
-/**
- * Tipos de punteros soportados por la pila. Los datos almacenados en la pila
- * deben implementar estas funciones.
- */
-typedef void (*free_element_function_type)(void*);
-typedef void (*(*copy_element_function_type)(const void*));
-typedef int (*print_element_function_type)(FILE*, const void*);
 
 /**
  * Estructura que representa una pila FIFO.

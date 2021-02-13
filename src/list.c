@@ -17,10 +17,10 @@ typedef struct _Node {
 
 struct _List {
     Node* first;
-    destroy_elementlist_function_type destroy_element_function;
-    copy_elementlist_function_type copy_element_function;
-    print_elementlist_function_type print_element_function;
-    cmp_elementlist_function_type cmp_element_function;
+    free_element_function_type free_element_function;
+    copy_element_function_type copy_element_function;
+    print_element_function_type print_element_function;
+    cmp_element_function_type cmp_element_function;
 };
 
 Node* node_ini()
@@ -38,21 +38,22 @@ Node* node_ini()
     return pn;
 }
 
-void node_free(Node* pn,
-               destroy_elementlist_function_type destroy_element_function)
+void node_free(List* pl, Node* pn)
 {
     if (!pn) {
         return;
     }
-
-    destroy_element_function(pn->item);
+    
+    if (pn->item) {
+        pl->free_element_function(pn->item);
+    }
     free(pn);
 }
 
-List* list_ini(destroy_elementlist_function_type f1,
-               copy_elementlist_function_type f2,
-               print_elementlist_function_type f3,
-               cmp_elementlist_function_type f4)
+List* list_ini(free_element_function_type f1,
+               copy_element_function_type f2,
+               print_element_function_type f3,
+               cmp_element_function_type f4)
 {
     List* pl = NULL;
 
@@ -62,7 +63,7 @@ List* list_ini(destroy_elementlist_function_type f1,
     }
 
     pl->first = NULL;
-    pl->destroy_element_function = f1;
+    pl->free_element_function = f1;
     pl->copy_element_function = f2;
     pl->print_element_function = f3;
     pl->cmp_element_function = f4;
@@ -78,10 +79,10 @@ void list_free(List* pl)
         return;
     }
 
-    while (!pl->first) {
+    while (pl->first) {
         pn = pl->first;
         pl->first = pl->first->next;
-        node_free(pn, pl->destroy_element_function);
+        node_free(pl, pn);
     }
 
     free(pl);
@@ -102,7 +103,7 @@ Status list_insertFirst(List* pl, const void* e)
 
     pn->item = pl->copy_element_function(e);
     if (!pn->item) {
-        node_free(pn, pl->destroy_element_function);
+        node_free(pl, pn);
         return ERR;
     }
 
@@ -128,7 +129,7 @@ Status list_insertLast(List* pl, const void* e)
 
     pn->item = pl->copy_element_function(e);
     if (!pn->item) {
-        node_free(pn, pl->destroy_element_function);
+        node_free(pl, pn);
         return ERR;
     }
 
@@ -161,7 +162,7 @@ Status list_insertInOrder(List* pl, const void* e)
 
     pn->item = pl->copy_element_function(e);
     if (!pn->item) {
-        node_free(pn, pl->destroy_element_function);
+        node_free(pl, pn);
         return ERR;
     }
 
@@ -206,7 +207,7 @@ void* list_extractFirst(List* pl)
     }
 
     pl->first = pn->next;
-    node_free(pn, pl->destroy_element_function);
+    node_free(pl, pn);
 
     return e;
 }
@@ -229,7 +230,7 @@ void* list_extractLast(List* pl)
         if (!e) {
             return NULL;
         }
-        node_free(pl->first, pl->destroy_element_function);
+        node_free(pl, pl->first);
         pl->first = NULL;
     } else {
         pn = pl->first;
@@ -240,7 +241,7 @@ void* list_extractLast(List* pl)
         if (!e) {
             return NULL;
         }
-        node_free(pn->next, pl->destroy_element_function);
+        node_free(pl, pn->next);
         pn->next = NULL;
     }
 
@@ -250,7 +251,7 @@ void* list_extractLast(List* pl)
 Bool list_isEmpty(const List* pl)
 {
     if (!pl) {
-        return NULL;
+        return FALSE;
     }
 
     if (pl->first) {
@@ -280,7 +281,7 @@ const void* list_get(const List* pl, int i)
 
 int list_size(const List* pl)
 {
-    int counter = 0;
+    int counter = 1;
     Node* pn = NULL;
 
     if (!pl) {

@@ -11,16 +11,12 @@
 
 #include <stdio.h>
 
+#include "functions.h"
 #include "types.h"
 
 #define MAXQUEUE 100
 
 typedef struct _Queue Queue;
-
-/** Tipos de punteros soportados por la cola */
-typedef void (*destroy_elementqueue_function_type)(void*);
-typedef void(*(*copy_elementqueue_function_type)(const void*));
-typedef int (*print_elementqueue_function_type)(FILE*, const void*);
 
 /**
  * @brief Inicializa una cola.
@@ -29,9 +25,9 @@ typedef int (*print_elementqueue_function_type)(FILE*, const void*);
  * @param f3 Funcion que imprime un elemento de la cola.
  * @return La cola inicializada o NULL si se produce algun error.
  */
-Queue* queue_ini(destroy_elementqueue_function_type f1,
-                 copy_elementqueue_function_type f2,
-                 print_elementqueue_function_type f3);
+Queue* queue_ini(free_element_function_type f1,
+                 copy_element_function_type f2,
+                 print_element_function_type f3);
 
 /**
  * @brief Libera la memoria reservada de una cola.

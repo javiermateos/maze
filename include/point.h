@@ -65,6 +65,13 @@ int point_getCoordinateY(const Point* pp);
 char point_getSymbol(const Point* pp);
 
 /**
+ * @brief Obtiene el punto desde el que se accedio a otro punto.
+ * @param pp Punto al que se accedio.
+ * @return El punto padre o NULL si no tiene padre.
+ */
+Point* point_getParent(const Point* pp);
+
+/**
  * @defgroup Tipo de punto
  *
  * Funciones que indican el tipo de punto que tenemos.
@@ -97,6 +104,14 @@ Status point_setCoordinateY(Point* pp, const int y);
  * @return OK o ERR si se produce en algun error.
  */
 Status point_setSymbol(Point* pp, const char s);
+
+/**
+ * @brief Modifica el punto desde el que se accedio a un punto.
+ * @param pp_dst Punto al que se accedio.
+ * @param pp_src Punto desde el que se accedio.
+ * return OK si se establece el punto o ERR si se produce algun error.
+ */
+Status point_setParent(Point* pp_dst, Point* pp_src);
 
 /**
  * @brief Permite saber si dos puntos son iguales.

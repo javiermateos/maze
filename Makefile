@@ -13,48 +13,51 @@ BDIR := build
 LDIR := lib
 DDIR := data
 
-NAME := libmaze
-L_NAMES:= point.c map.c utils.c stack.c functions.c queue.c
-T_NAMES:= map_test.c point_test.c stack_test.c map_resolve_stack.c
+NAME := maze
+L_NAMES := point.c map.c utils.c functions.c
+S_NAMES := stack.c queue.c list.c tree.c
+T_NAMES := map_test.c point_test.c stack_test.c queue_test.c tree_test.c
 
 CC := gcc
 CFLAGS := -g -I$(IDIR) -ansi -pedantic -Wall -Wextra
 
 SFILES := c
 OFILES := o
-LFILES := a
 L_SOURCES := $(foreach sname, $(L_NAMES), $(SDIR)/$(sname))
 L_OBJECTS := $(patsubst $(SDIR)/%.$(SFILES), $(ODIR)/%.$(OFILES), $(L_SOURCES))
-
+S_SOURCES := $(foreach sname, $(S_NAMES), $(SDIR)/$(sname)) 
+S_OBJECTS := $(patsubst $(SDIR)/%.$(SFILES), $(ODIR)/%.$(OFILES), $(S_SOURCES))
 T_SOURCES := $(foreach sname, $(T_NAMES), $(TDIR)/$(sname))
-TESTS := $(patsubst $(TDIR)/%.$(SFILES), $(BDIR)/%, $(T_SOURCES))
 
-LIB := $(LDIR)/$(NAME).$(LFILES)
+NAME_TESTS := $(patsubst $(TDIR)/%.$(SFILES), $(BDIR)/%, $(T_SOURCES))
 
-build: build_tests clear
+build: build_project tests bin clear
 
-build_tests: $(TESTS)
+# Build the folders needed by the project
+build_project:
+	@mkdir -pv $(BDIR)
+	@mkdir -pv $(ODIR)
+
+.PHONY: tests
+tests: build_project $(NAME_TESTS)
 	@echo ">Tests compiled..."
 
-build_lib: $(LIB)
-	@echo ">Static library built..."
+bin: $(NAME)
+	@echo ">Binary compiled..."
 	
 # Rule to compile the tests
-$(TESTS): $(BDIR)/%: $(L_OBJECTS) $(ODIR)/%.$(OFILES) 
+$(NAME_TESTS): $(BDIR)/%_test: $(L_OBJECTS) $(ODIR)/%_test.$(OFILES) $(ODIR)/%.$(OFILES) 
 	@echo ">Building tests..."
-	@mkdir -pv $(BDIR)
 	$(CC) $^ -o $@
 
-# Rule to make the static library
-$(LIB): $(L_OBJECTS)
-	@echo ">Building static library..."
-	@mkdir -pv $(LDIR)
-	ar rcs $@ $<
+# Rule to make the binary
+$(NAME): $(L_OBJECTS) $(S_OBJECTS)
+	@echo ">Building binary..."
+	$(CC) $^ -o $@
 
 # Rule to make every object file
 $(ODIR)/%$(OFILES): */%$(SFILES)
 	@echo ">Compiling $@..."
-	@mkdir -pv $(ODIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clear:

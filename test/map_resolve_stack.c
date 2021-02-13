@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "stack.h"
-#include "functions.h"
 #include "point.h"
 #include "map.h"
 #include "utils.h"

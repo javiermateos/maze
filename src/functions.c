@@ -40,9 +40,27 @@ int print_intp_function(FILE* pf, const void* e)
     return fprintf(pf, "[%d]\n", *((int*)e));
 }
 
+int cmp_intp_function(const void* e1, const void* e2)
+{
+
+    if (!e1 || !e2) {
+        return 2;
+    }
+
+    if (*((int*)e1) == *((int*)e2)) {
+        return 0;
+    } else if (*((int*)e1) < *((int*)e2)) {
+        return -1;
+    } else if (*((int*)e1) > *((int*)e2)) {
+        return 1;
+    }
+
+    return 2;
+}
+
 void destroy_point_function(void* e)
 {
-    point_free((Point*)e);  
+    point_free((Point*)e);
 }
 
 void* copy_point_function(const void* e)

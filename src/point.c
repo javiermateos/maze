@@ -15,6 +15,7 @@ struct _Point {
     int x;  /**< La coordenada x en el mapa */
     int y;  /**< La coordenada y en el mapa */
     char s; /**< El simbolo de representacion del punto */
+    struct _Point* parent; /**< Punto desde el que se accedio a este punto */
 };
 
 Point* point_ini(int x, int y, char s)
@@ -29,6 +30,7 @@ Point* point_ini(int x, int y, char s)
     pp->x = x;
     pp->y = y;
     pp->s = s;
+    pp->parent = NULL;
 
     return pp;
 }
@@ -67,6 +69,15 @@ char point_getSymbol(const Point* pp)
     }
 
     return pp->s;
+}
+
+Point* point_getParent(const Point* pp)
+{
+    if (!pp) {
+        return NULL;
+    }
+
+    return pp->parent;
 }
 
 Bool point_isInput(Point* pp)
@@ -138,10 +149,21 @@ Status point_setSymbol(Point* pp, const char s)
     return OK;
 }
 
+Status point_setParent(Point* pp_dst, Point* pp_src)
+{
+    if (!pp_dst || !pp_src) {
+        return ERR;
+    }
+
+    pp_dst->parent = pp_src;
+
+    return OK;
+}
+
 Bool point_equals(const Point* pp1, const Point* pp2)
 {
     if (!pp1 || !pp2 || pp1->x != pp2->x || pp1->y != pp2->y ||
-        pp1->s != pp2->s) {
+        pp1->s != pp2->s || pp1->parent != pp2->parent) {
         return FALSE;
     }
 
@@ -164,6 +186,7 @@ Point* point_copy(const Point* pp)
     pp_copy->x = pp->x;
     pp_copy->y = pp->y;
     pp_copy->s = pp->s;
+    pp_copy->parent = pp->parent;
 
     return pp_copy;
 }
