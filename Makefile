@@ -15,7 +15,7 @@ DDIR := data
 
 NAME := maze
 L_NAMES := point.c map.c utils.c functions.c
-S_NAMES := stack.c queue.c list.c tree.c
+S_NAMES := stack.c queue.c list.c tree.c map_solver.c main.c
 T_NAMES := map_test.c point_test.c stack_test.c queue_test.c tree_test.c
 
 CC := gcc
@@ -40,19 +40,23 @@ build_project:
 
 .PHONY: tests
 tests: build_project $(NAME_TESTS)
-	@echo ">Tests compiled..."
+	@echo "*******************************************************************"
+	@echo ">Tests compiled succesfully!"
+	@echo "*******************************************************************"
 
 bin: $(NAME)
+	@echo "*******************************************************************"
 	@echo ">Binary compiled..."
+	@echo "*******************************************************************"
 	
 # Rule to compile the tests
 $(NAME_TESTS): $(BDIR)/%_test: $(L_OBJECTS) $(ODIR)/%_test.$(OFILES) $(ODIR)/%.$(OFILES) 
-	@echo ">Building tests..."
+	@echo ">Building test $@..."
 	$(CC) $^ -o $@
 
 # Rule to make the binary
 $(NAME): $(L_OBJECTS) $(S_OBJECTS)
-	@echo ">Building binary..."
+	@echo ">Building binary $@..."
 	$(CC) $^ -o $@
 
 # Rule to make every object file

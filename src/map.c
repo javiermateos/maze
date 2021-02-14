@@ -17,7 +17,8 @@ struct _Map {
     Point* points[MAX_POINT];
 };
 
-Map* map_ini() {
+Map* map_ini()
+{
     int i;
     Map* pm = NULL;
 
@@ -79,7 +80,7 @@ Point* map_getInput(const Map* pm)
 
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getSymbol(pm->points[i]) == INPUT) {
-            input = point_copy(pm->points[i]);
+            input = pm->points[i];
         }
     }
 
@@ -97,11 +98,37 @@ Point* map_getOutput(const Map* pm)
 
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getSymbol(pm->points[i]) == OUTPUT) {
-            output = point_copy(pm->points[i]);
+            output = pm->points[i];
         }
     }
 
     return output;
+}
+
+Point* map_getPoint(Map* pm, const Point* pp)
+{
+    int ncols, indice, x, y;
+    Point* pp_map = NULL;
+
+    if (!pm || !pp) {
+        return NULL;
+    }
+
+    ncols = map_getNcols(pm);
+    x = point_getCoordinateX(pp);
+    y = point_getCoordinateY(pp);
+
+    indice = y * ncols + x;
+    if (indice >= MAX_POINT) {
+        return NULL;
+    }
+
+    /** Comprobamos si existe el punto **/
+    if (pm->points[indice]) {
+        pp_map = pm->points[indice];
+    }
+
+    return pp_map;
 }
 
 Point* map_getNeightbarPoint(const Map* pm, const Point* pp, const Move mov)
@@ -143,7 +170,7 @@ Point* map_getNeightbarPoint(const Map* pm, const Point* pp, const Move mov)
     for (i = 0; i < MAX_POINT && pm->points[i] != NULL; i++) {
         if (point_getCoordinateX(pm->points[i]) == x &&
             point_getCoordinateY(pm->points[i]) == y) {
-            pp_neightbar = point_copy(pm->points[i]);
+            pp_neightbar = pm->points[i];
         }
     }
 
@@ -209,7 +236,7 @@ int map_print(FILE* pf, const Map* pm)
 
     for (i = 0; i < pm->nrow; i++) {
         for (j = 0; j < pm->ncol; j++) {
-            index  = (pm->ncol) * i + j;
+            index = (pm->ncol) * i + j;
             c = point_getSymbol(pm->points[index]);
             counter += fprintf(pf, "%c", c);
         }

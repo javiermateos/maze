@@ -6,7 +6,6 @@
 int main(int argc, char* argv[]) {
 
     int nrow, ncol;
-    Status st;
     Map* pm = NULL;
     FILE* pf = NULL;
 
@@ -21,11 +20,9 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    pm = map_ini();
-
     /* Cargar el mapa en memoria */
-    st = map_read(pf, pm);
-    if (st == ERR) {
+    pm = map_read(pf);
+    if (!pm) {
         fclose(pf);
         map_free(pm);
         fprintf(stderr, "Error leyendo el mapa en memoria...\n");

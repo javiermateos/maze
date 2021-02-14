@@ -14,7 +14,7 @@
 #include "functions.h"
 #include "types.h"
 
-#define MAXQUEUE 100
+#define MAXQUEUE 4096
 
 typedef struct _Queue Queue;
 

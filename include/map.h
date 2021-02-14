@@ -9,12 +9,11 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include <stdio.h>
-
 #include "point.h"
 #include "types.h"
 
 #define MAX_POINT 4096 /**< Numero maximo de puntos de un mapa */
+#define NUM_MOVEMENTS 4 /**< Numero de tipos de movimientos */
 
 /**
  * Estructura que define un mapa de un laberinto.
@@ -75,6 +74,14 @@ Point* map_getInput(const Map* pm);
  * dicho punto en el mapa.
  */
 Point* map_getOutput(const Map* pm);
+
+/**
+ * @brief Obtiene la referencia a un punto del mapa.
+ * @param pm Mapa del que se obtiene el punto.
+ * @param pp Punto con los atributos.
+ * @return El punto del mapa o NULL si se produce un error.
+ */
+Point* map_getPoint(Map* pm, const Point* pp);
 
 /**
  * @brief Permite obtener un punto vecino de otro dado un movimiento.

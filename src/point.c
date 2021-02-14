@@ -41,6 +41,8 @@ void point_free(Point* pp)
         return;
     }
 
+    pp->parent = NULL;
+
     free(pp);
 }
 
@@ -149,13 +151,13 @@ Status point_setSymbol(Point* pp, const char s)
     return OK;
 }
 
-Status point_setParent(Point* pp_dst, Point* pp_src)
+Status point_setParent(Point* pp_child, Point* pp_parent)
 {
-    if (!pp_dst || !pp_src) {
+    if (!pp_child || !pp_parent) {
         return ERR;
     }
 
-    pp_dst->parent = pp_src;
+    pp_child->parent = pp_parent;
 
     return OK;
 }

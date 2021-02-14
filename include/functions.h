@@ -6,6 +6,9 @@
  * @date 06/02/2021
  */
 
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
 #include <stdio.h>
 
 typedef void (*free_element_function_type)(void*);
@@ -36,7 +39,4 @@ void* copy_point_function(const void* e);
 
 int print_point_function(FILE* f, const void* e);
 
-/** TODO **/
-int cmp_point_function(const void* pp_e1, const void* pp_e2);
-
-/**@}*/
+#endif /* FUNCTIONS_H */

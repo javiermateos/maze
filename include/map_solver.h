@@ -6,10 +6,12 @@
  * @date 12/02/2020
  */
 
-#ifndef MAP_H
-#define MAP_H
+#ifndef MAP_SOLVER_H
+#define MAP_SOLVER_H
 
-#include <stdio.h>
+#include "point.h"
+#include "map.h"
+#include "types.h"
 
 /**
  * @brief Busca si un laberinto tiene solucion.
@@ -18,10 +20,8 @@
  * @return El numero de pasos necesarios para resolver el laberinto o un numero
  * negativo si no tiene solucion o se produce algun error.
  */
-int mapsolver_stack(const char* map_file, const Move strat[4]);
+Bool mapsolver_stack(FILE* map_file, const Move strat[NUM_MOVEMENTS]);
+Bool mapsolver_queue(FILE* map_file, const Move strat[NUM_MOVEMENTS]);
+Bool mapsolver_recursive(FILE* map_file, const Move strat[NUM_MOVEMENTS]);
 
-int mapsolver_queue(const char* map_file, const Move strat[4]);
-
-void mapsolver_run(const char* map_file, const Move strat[][4], const int num_strategies);
-
-#endif /* MAP_H */
+#endif /* MAP_SOLVER_H */

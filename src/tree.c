@@ -25,8 +25,8 @@ struct _Tree {
 };
 
 /** Funciones privadas **/
-NodeBT* node_ini();
-void node_free(Tree* pa, NodeBT* pn);
+static NodeBT* node_ini();
+static void node_free(Tree* pa, NodeBT* pn);
 void tree_free_rec(Tree* pa, NodeBT** ppn);
 Status tree_insert_Rec(Tree* pa, NodeBT** ppn, const void* e);
 Bool tree_find_rec(Tree* pa, NodeBT** ppn, const void* e);
@@ -38,7 +38,7 @@ Status tree_inOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn);
 Status tree_postOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn);
 /************************/
 
-NodeBT* node_ini()
+static NodeBT* node_ini()
 {
     NodeBT* pn = NULL;
 
@@ -54,7 +54,7 @@ NodeBT* node_ini()
     return pn;
 }
 
-void node_free(Tree* pa, NodeBT* pn)
+static void node_free(Tree* pa, NodeBT* pn)
 {
     if (!pn) {
         return;

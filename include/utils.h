@@ -9,8 +9,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <stdio.h>
-
 #include "map.h"
 #include "stack.h"
 #include "types.h"
@@ -23,15 +21,6 @@
  * @param pl Mapa en el que se carga.
  * @return OK si todo sale bien o ERR si se produce algun error.
  */
-Status map_read(FILE* pf, Map* pl);
+Map* map_read(FILE* pf);
 
-/**
- * @brief Obtiene un camino del mapa desde su input hasta su output.
- * @param pm Mapa del que se obtiene el camino.
- * @param[out] ps Pila empleada para almacenar el camino.
- * @return TRUE si encuentra un camino o FALSE si no lo encuentra o se
- * produce algun error.
- */
-Bool deep_search(Map* pm, Stack* ps_c);
-
-#endif
+#endif /* UTILS_H */

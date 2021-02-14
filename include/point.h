@@ -19,10 +19,12 @@
  */
 #define ERRCHAR 'E' /**< Error en el punto */
 #define INPUT 'i'   /**< Punto de entrada del laberinto */
-#define VISITED 'v' /**< Punto que ha sido visitado */
+#define VISITED 'V' /**< Punto que ha sido visitado */
+#define VISITING 'v' /**< Punto que esta siendo visitado */
 #define OUTPUT 'o'  /**< Punto de salida del laberinto */
 #define BARRIER '+' /**< Punto no transitable */
 #define SPACE ' '   /**< Punto transitable */
+#define PATH '.'    /**< Punto perteneciente al camino optimo */
 
 /**
  * Estructura que representa un punto en el mapa.
@@ -107,11 +109,11 @@ Status point_setSymbol(Point* pp, const char s);
 
 /**
  * @brief Modifica el punto desde el que se accedio a un punto.
- * @param pp_dst Punto al que se accedio.
- * @param pp_src Punto desde el que se accedio.
+ * @param pp_child Punto al que se accede.
+ * @param pp_parent Punto desde el que se accede.
  * return OK si se establece el punto o ERR si se produce algun error.
  */
-Status point_setParent(Point* pp_dst, Point* pp_src);
+Status point_setParent(Point* pp_child, Point* pp_parent);
 
 /**
  * @brief Permite saber si dos puntos son iguales.

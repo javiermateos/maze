@@ -1,10 +1,12 @@
 #include <stdlib.h>
+#include <string.h>
 
-#include "stack.h"
-#include "map.h"
+#include "map_solver.h"
 #include "types.h"
+#include "utils.h"
 
-Bool deep_search(Map* pm, Stack* ps_c);
+#define NUM_STRATEGIES 4
+
 /**
  * @brief Funciones de resolucion de mapas.
  * @param map_file Nombre del fichero en el que se encuentra el mapa.
@@ -13,80 +15,65 @@ Bool deep_search(Map* pm, Stack* ps_c);
  * si no sabe calcularlo el numero de movimientos realizados para resolver
  * el mapa.
  */
-int mapsolver_stack(const char* map_file, const Move strat[4]);
-int mapsolver_queue(const char* map_file, const Move strat[4]);
-int mapsolver_list(const char* map_file, const Move strat[4]);
-int mapsolver_tree(const char* map_file, const Move strat[4]);
+void print_optimal_path(Map* pm);
+void mapsolver_run(FILE* map_file,
+                   const Move strat[][NUM_MOVEMENTS],
+                   const int num_strategies,
+                   const char* tad);
 
 int main(int argc, char* argv[])
 {
     FILE* pf = NULL;
+    /** Estrategias seguidas para resolver el laberinto **/
+    const Move strat[NUM_STRATEGIES][NUM_MOVEMENTS] = {
+        { RIGHT, LEFT, UP, DOWN },
+        { DOWN, RIGHT, LEFT, UP },
+        { UP, DOWN, RIGHT, LEFT },
+        { LEFT, UP, DOWN, RIGHT }
+    };
 
-    if (argc != 2) {
-        fprintf(pf, "Error en el numero de argumentos...\n");
+    if (argc != 3) {
+        fprintf(stderr, "Error en el numero de argumentos...\n");
+        fprintf(stderr, "Formato: maze <map_file> <tad>");
         exit(EXIT_FAILURE);
     }
+
+    pf = fopen(argv[1], "r");
+    if (!pf) {
+        fprintf(stderr, "Error abriendo el fichero %s", __FILE__);
+        exit(EXIT_FAILURE);
+    }
+
+    mapsolver_run(pf, strat, NUM_STRATEGIES, argv[2]);
+
+    fclose(pf);
 
     exit(EXIT_SUCCESS);
 }
 
-Bool deep_search(Map* pm, Stack* ps_c)
+void mapsolver_run(FILE* map_file,
+                   const Move strat[][NUM_MOVEMENTS],
+                   const int num_strategies,
+                   const char* tad)
 {
-    char s;
-    Move move;
-    Point* pp = NULL;
-    Point* pp_neightbar = NULL;
-    Stack* ps = NULL;
+    int i;
+    char const* move_to_str[] = {"RIGHT", "UP", "LEFT", "DOWN", "STAY"};
 
-    if (!pm || !ps_c) {
-        return FALSE;
-    }
-
-    ps = stack_ini(destroy_point_function, copy_point_function, print_point_function);
-    if (!ps) {
-        return FALSE;
-    }
-
-    pp = map_getInput(pm);
-    if (!pp) {
-        stack_free(ps);
-        return FALSE;
-    }
-
-    if (stack_push(ps, pp) == ERR || stack_push(ps_c, pp) == ERR) {
-        return FALSE;
-    }
-
-    point_free(pp);
-
-    while (!stack_isEmpty(ps)) {
-        pp = (Point*)stack_pop(ps);
-        s = point_getSymbol(pp);
-        if (s != VISITED) {
-            if (s != INPUT) {
-                point_setSymbol(pp, VISITED);
-                if (map_setPoint(pm, pp) == ERR) {
-                    point_free(pp);
-                    stack_free(ps);
-                    return FALSE;
-                }
-            }
-            for (move = RIGHT; move < STAY; move++) {
-                pp_neightbar = map_getNeightbarPoint(pm, pp, move);
-                if (point_isOutput(pp_neightbar)) {
-                    stack_push(ps_c, pp_neightbar);
-                    point_free(pp);
-                    stack_free(ps);
-                    return TRUE;
-                }
-                if (point_isSpace(pp_neightbar)) {
-                    stack_push(ps, pp_neightbar);
-                    stack_push(ps_c, pp_neightbar);
-                }
-            }
+    for (i = 0; i < num_strategies; i++) {
+        printf("Buscando el camino mediante la estrategia: ");
+        printf("{ %s, %s, %s, %s }\n",
+               move_to_str[strat[i][0]],
+               move_to_str[strat[i][1]],
+               move_to_str[strat[i][2]],
+               move_to_str[strat[i][3]]);
+        if (!strcmp(tad, "stack")) {
+            mapsolver_stack(map_file, strat[i]);
+        } else if (!strcmp(tad, "queue")) {
+            mapsolver_queue(map_file, strat[i]);
+        } else {
+            mapsolver_recursive(map_file, strat[i]);
         }
-        point_free(pp);
-    } 
-
-    return FALSE;
+        fseek(map_file, 0, SEEK_SET);
+    }
 }
+

@@ -23,7 +23,12 @@ struct _List {
     cmp_element_function_type cmp_element_function;
 };
 
-Node* node_ini()
+/** Funciones privadas **/
+static Node* node_ini();
+static void node_free(List* pl, Node* pn);
+/************************/
+
+static Node* node_ini()
 {
     Node* pn = NULL;
 
@@ -38,7 +43,7 @@ Node* node_ini()
     return pn;
 }
 
-void node_free(List* pl, Node* pn)
+static void node_free(List* pl, Node* pn)
 {
     if (!pn) {
         return;
