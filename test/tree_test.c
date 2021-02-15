@@ -8,6 +8,7 @@ int main(int argc, char* argv[])
     FILE* pf = NULL;
     Tree* pa = NULL;
     int num;
+    int found;
 
     if (argc != 2) {
         fprintf(stderr, "Error en el numero de argumentos...\n");
@@ -54,14 +55,16 @@ int main(int argc, char* argv[])
     tree_postOrder(stdout, pa);
     printf("\n");
 
-    printf("Introduce un numero: ");
-    scanf("%d", &num);
-
-    if (tree_find(pa, &num)) {
-        printf("El dato %d se encuentra dentro del Arbol\n", num);
-    } else {
-        printf("El dato %d NO se encuentra dentro del Arbol\n", num);
-    }
+    do {
+        printf("Introduce un numero: ");
+        scanf("%d", &num);
+        found = tree_find(pa, &num);
+        if (found) {
+            printf("El dato %d se encuentra dentro del Arbol\n", num);
+        } else {
+            printf("El dato %d NO se encuentra dentro del Arbol\n", num);
+        }
+    } while (!found);
 
     tree_free(pa);
     fclose(pf);
