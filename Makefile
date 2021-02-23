@@ -70,8 +70,9 @@ $(ODIR)/%$(OFILES): */%$(SFILES)
 .PHONY: clean
 clean:
 	@rm -rfv $(ODIR) $(LDIR) $(BDIR)
+	@rm -rfv $(NAME)
 
-.PHONY: test
+.PHONY: run_test
 run_test: tests
 	@echo ">Running point_test..."
 	$(BDIR)/point_test
@@ -90,7 +91,7 @@ run_test: tests
 	@echo ">Running tree_test with data.txt..."
 	$(BDIR)/tree_test $(DDIR)/data.txt
 
-.PHONY: testv
+.PHONY: run_testv
 run_testv: tests
 	@echo ">Running point_test with valgrind..."
 	valgrind --leak-check=full $(BDIR)/point_test

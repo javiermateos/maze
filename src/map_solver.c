@@ -1,5 +1,6 @@
 #include "map_solver.h"
 #include "map.h"
+#include "point.h"
 #include "utils.h"
 #include "stack.h"
 #include "queue.h"
@@ -87,6 +88,7 @@ Bool mapsolver_stack(FILE* map_file, const Move strat[NUM_MOVEMENTS])
                     print_optimal_path(pm);
                     point_free(pp);
                     map_free(pm);
+                    stack_free(ps);
                     return TRUE;
                 }
                 if (point_isSpace(pp_neightbar)) {
@@ -99,6 +101,7 @@ Bool mapsolver_stack(FILE* map_file, const Move strat[NUM_MOVEMENTS])
     }
 
     map_free(pm);
+    stack_free(ps);
 
     return FALSE;
 }
@@ -162,6 +165,7 @@ Bool mapsolver_queue(FILE* map_file, const Move strat[NUM_MOVEMENTS])
                     print_optimal_path(pm);
                     point_free(pp);
                     map_free(pm);
+                    queue_free(pq);
                     return TRUE;
                 }
                 if (point_isSpace(pp_neightbar)) {
@@ -173,6 +177,7 @@ Bool mapsolver_queue(FILE* map_file, const Move strat[NUM_MOVEMENTS])
         point_free(pp);
     }
 
+    queue_free(pq);
     map_free(pm);
 
     return FALSE;

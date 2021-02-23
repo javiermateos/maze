@@ -1,6 +1,6 @@
 /**
  * @file functions.h
- * @brief Funciones envoltorio de los datos que se introducen en la pila.
+ * @brief Funciones envoltorio de los datos que se introducen en los TAD.
  * @author Javier Mateos
  *
  * @date 06/02/2021

@@ -1,6 +1,6 @@
 /**
  * @file list.h
- * @brief Interfaz publica del TAD List.
+ * @brief Interfaz publica del TAD List, que define una lista enlazada.
  * @author Javier Mateos
  *
  * @date 09/02/2021
@@ -18,7 +18,7 @@ typedef struct _List List;
 
 /**
  * @brief Inicializa una lista y todos sus elementos.
- * @param f1 Funcion que libera la memoria de los elementos de la list.
+ * @param f1 Funcion que libera la memoria de los elementos de la lista.
  * @param f2 Funcion que copia un elemento de la lista.
  * @param f3 Funcion que imprime un elemento de la lista.
  * @param f4 Funcion que compara dos elementos de una lista.
@@ -36,7 +36,7 @@ List* list_ini(free_element_function_type f1,
 void list_free(List* pl);
 
 /**
- * @brief Inserta un element en la lista al principio de la misma.
+ * @brief Inserta un elemento en la lista al principio de la misma.
  *
  * Esta funcion realiza una copia del elemento.
  *

@@ -28,7 +28,7 @@ struct _Tree {
 static NodeBT* node_ini();
 static void node_free(Tree* pa, NodeBT* pn);
 void tree_free_rec(Tree* pa, NodeBT** ppn);
-Status tree_insert_Rec(Tree* pa, NodeBT** ppn, const void* e);
+Status tree_insert_rec(Tree* pa, NodeBT** ppn, const void* e);
 Bool tree_find_rec(Tree* pa, NodeBT** ppn, const void* e);
 int maximo(int a, int b);
 int tree_depth_rec(const Tree* pa, NodeBT* const* ppn);
@@ -42,7 +42,7 @@ static NodeBT* node_ini()
 {
     NodeBT* pn = NULL;
 
-    pn = (NodeBT*)malloc(sizeof(NodeBT*));
+    pn = (NodeBT*)malloc(sizeof(NodeBT));
     if (!pn) {
         return NULL;
     }
@@ -120,10 +120,10 @@ Status tree_insert(Tree* pa, const void* e)
         return ERR;
     }
 
-    return tree_insert_Rec(pa, &(pa->root), e);
+    return tree_insert_rec(pa, &(pa->root), e);
 }
 
-Status tree_insert_Rec(Tree* pa, NodeBT** ppn, const void* e)
+Status tree_insert_rec(Tree* pa, NodeBT** ppn, const void* e)
 {
     int cmp;
 
@@ -135,6 +135,7 @@ Status tree_insert_Rec(Tree* pa, NodeBT** ppn, const void* e)
         }
         (*ppn)->info = pa->copy_element_function(e);
         if (!(*ppn)->info) {
+            node_free(pa, *ppn);
             return ERR;
         }
         return OK;
@@ -143,9 +144,9 @@ Status tree_insert_Rec(Tree* pa, NodeBT** ppn, const void* e)
     /** Recursividad **/
     cmp = pa->cmp_element_function(e, (*ppn)->info);
     if (cmp < 0) {
-        return tree_insert_Rec(pa, &((*ppn)->left), e);
+        return tree_insert_rec(pa, &((*ppn)->left), e);
     } else if (cmp > 0) {
-        return tree_insert_Rec(pa, &((*ppn)->right), e);
+        return tree_insert_rec(pa, &((*ppn)->right), e);
     }
 
     /** El elemento se encuentra en el arbol **/
@@ -272,6 +273,10 @@ Status tree_preOrder(FILE* pf, const Tree* pa)
         return ERR;
     }
 
+    if (tree_isEmpty(pa)) {
+        return ERR;
+    }
+
     return tree_preOrder_rec(pf, pa, &(pa->root));
 }
 
@@ -284,8 +289,12 @@ Status tree_preOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn)
 
     /** Recursividad */
     pa->print_element_function(pf, (*ppn)->info);
-    tree_preOrder_rec(pf, pa, &((*ppn)->left));
-    tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    if ((*ppn)->left) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->left));
+    }
+    if ((*ppn)->right) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    }
 
     return OK;
 }
@@ -293,6 +302,10 @@ Status tree_preOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn)
 Status tree_inOrder(FILE* pf, const Tree* pa)
 {
     if (!pf || !pa) {
+        return ERR;
+    }
+
+    if (tree_isEmpty(pa)) {
         return ERR;
     }
 
@@ -307,9 +320,13 @@ Status tree_inOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn)
     }
 
     /** Recursividad **/
-    tree_preOrder_rec(pf, pa, &((*ppn)->left));
+    if ((*ppn)->left) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->left));
+    }
     pa->print_element_function(pf, (*ppn)->info);
-    tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    if ((*ppn)->right) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    }
 
     return OK;
 }
@@ -317,6 +334,10 @@ Status tree_inOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn)
 Status tree_postOrder(FILE* pf, const Tree* pa)
 {
     if (!pf || !pa) {
+        return ERR;
+    }
+
+    if (tree_isEmpty(pa)) {
         return ERR;
     }
 
@@ -330,8 +351,12 @@ Status tree_postOrder_rec(FILE* pf, const Tree* pa, NodeBT* const* ppn)
     }
 
     /** Recursividad **/
-    tree_preOrder_rec(pf, pa, &((*ppn)->left));
-    tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    if ((*ppn)->left) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->left));
+    }
+    if ((*ppn)->right) {
+        tree_preOrder_rec(pf, pa, &((*ppn)->right));
+    }
     pa->print_element_function(pf, (*ppn)->info);
 
     return OK;
